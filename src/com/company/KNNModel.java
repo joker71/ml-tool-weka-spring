@@ -10,6 +10,7 @@ import weka.core.converters.ConverterUtils;
 import javax.sql.DataSource;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.util.Random;
 
 public class KNNModel{
     IBk iBk;
@@ -17,28 +18,29 @@ public class KNNModel{
     Instances test_data, train_data;
     String[] data_options;
     String[] model_options;
-    public KNNModel(String fileName) throws Exception{
+    public KNNModel(String fileName, String fileName1) throws Exception{
         //lấy file đầu vào
         MyDataModel myDataModel = new MyDataModel(fileName);
         //chia file thành bộ test và bộ train
-        train_data = myDataModel.setData(70, false);
-        test_data = myDataModel.setData(70, true);
+        train_data = myDataModel.setData(100, false);
+        myDataModel = new MyDataModel(fileName1);
+        test_data = myDataModel.setData(100, true);
     }
     public void buildKnn() throws Exception {
         //xây dựng model
         this.train_data.setClassIndex(this.train_data.numAttributes() - 1);
         this.iBk = new IBk(); //khoi tao mo hinh
         this.iBk.setOptions(model_options); //khoi tao mo hinh, dua option vao mo hinh
-        this.iBk.buildClassifier(train_data); // xay dung mô hình
+        this.iBk.buildClassifier(train_data);// xay dung mô hình
     }
     public void evalateKnn() throws Exception {
         this.test_data.setClassIndex(this.test_data.numAttributes() - 1);
-        Debug.Random rd = new Debug.Random();
+        Random rd = new Random();
         //danh gia mo hinh 10 folds-cross validate model
-        int folds = 10;
+        int folds =10;
         this.evaluation = new Evaluation(this.test_data);
         this.evaluation.crossValidateModel(this.iBk, this.test_data ,folds, rd);
-        System.out.println(this.evaluation.toSummaryString("ket qua danh gia mo hinh KNN", false));
+        System.out.println(this.evaluation.toSummaryString("ket qua danh gia mo hinh KNN", true));
     }
     public void predictClassLabel(String fileIn, String fileOut) throws Exception
     {
@@ -47,10 +49,11 @@ public class KNNModel{
         Instances unLabel = dataSource.getDataSet();
         unLabel.setClassIndex(unLabel.numAttributes() - 1);
         //for tu dau den cuoi tung instans
-        for (int i = 0; i < unLabel.numInstances()-1; i++)
+        for (int i = 0; i <= unLabel.numInstances()-1; i++)
         {
             //gan nhan cho tung doi tuong chua nhan
-            double predict = iBk.classifyInstance(unLabel.instance(i));
+            double predict= iBk.classifyInstance(unLabel.instance(i));
+            System.out.println(predict);
             unLabel.instance(i).setClassValue(predict);
         }
         //ghi file
