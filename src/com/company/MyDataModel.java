@@ -6,26 +6,36 @@ import weka.filters.unsupervised.instance.RemovePercentage;
 import weka.gui.beans.DataSource;
 
 public class MyDataModel {
-
+    Instances dataset;
+    Instances testSet;
+    Instances trainSet;
+    String[] data_options;
+    String[] model_options;
     ConverterUtils.DataSource dataSource;
-    Instances instances;
 
-    public MyDataModel(){}
-    public MyDataModel(String fileName) throws Exception{
-        // tao model MyDataModel voi file dau vao fileName
-        this.dataSource= new ConverterUtils.DataSource(fileName);
-        this.instances= dataSource.getDataSet();
-    }
-    public Instances setData(double percent, boolean isTest) throws Exception
-    {
-        //inputData: data dau vao
-        //percent: tỉ lệ phần trăm dữ liệu đc dữ lại
-        //isTesst: true, nếu muốn tạo data test, false nếu muốn tạo data train
-        RemovePercentage removePercentage = new RemovePercentage();
-        removePercentage.setPercentage(percent);
-        removePercentage.setInvertSelection(isTest);
-        removePercentage.setInputFormat(this.instances);
-        return  removePercentage.useFilter(this.instances, removePercentage);
+    public MyDataModel() {
     }
 
+    public MyDataModel(String filename, String model_option, String data_option) throws Exception {
+        if (!filename.isEmpty()) {
+            this.dataSource = new ConverterUtils.DataSource(filename);
+            this.dataset = this.dataSource.getDataSet();
+        }
+        if (model_option != null) {
+            this.model_options = weka.core.Utils.splitOptions(model_option);
+        }
+        if (data_option != null) {
+            this.data_options = weka.core.Utils.splitOptions(data_option);
+        }
+    }
+
+    public void setTestSet(String fileName) throws Exception {
+        ConverterUtils.DataSource testDataSource = new ConverterUtils.DataSource(fileName);
+        this.testSet = testDataSource.getDataSet();
+    }
+
+    public void setTrainSet(String fileName) throws Exception {
+        ConverterUtils.DataSource trainSetSource = new ConverterUtils.DataSource(fileName);
+        this.trainSet = trainSetSource.getDataSet();
+    }
 }
