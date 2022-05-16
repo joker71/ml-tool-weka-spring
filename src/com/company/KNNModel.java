@@ -20,7 +20,7 @@ public class KNNModel extends MyDataModel{
     public void buildKNN(String fileName) throws Exception {
         setTrainSet(fileName);
         this.trainSet.setClassIndex(this.trainSet.numAttributes()-1);
-        this.iBk = new IBk(5);
+        this.iBk = new IBk();
         iBk.setOptions(model_options);
         iBk.buildClassifier(trainSet);
     }

@@ -20,7 +20,7 @@ public class KMeansModel extends MyDataModel {
     public void buildKMeansModel(String fileName) throws Exception{
         setTrainSet(fileName);
         simpleKMeans = new SimpleKMeans();
-        simpleKMeans.setNumClusters(3);
+        simpleKMeans.setNumClusters(3);//so cum minh muon phan
         simpleKMeans.setDistanceFunction(new EuclideanDistance());
         simpleKMeans.buildClusterer(trainSet);
         System.out.println(simpleKMeans);
@@ -31,7 +31,7 @@ public class KMeansModel extends MyDataModel {
         for(int i=0; i<instances.numInstances(); i++)
         {
             double pre = simpleKMeans.clusterInstance(instances.instance(i));
-            instances.instance(i).setClassValue(pre);
+            System.out.println("Instance " + i + " belong to class " + pre);
         }
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileOut));
         bufferedWriter.write(instances.toString());

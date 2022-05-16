@@ -2,8 +2,7 @@ package com.company;
 
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
-import weka.filters.unsupervised.instance.RemovePercentage;
-import weka.gui.beans.DataSource;
+
 
 public class MyDataModel {
     Instances dataset;
